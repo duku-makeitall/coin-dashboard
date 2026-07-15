@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Pulse - 실시간 암호화폐 대시보드</title>
+  <!-- Chart.js CDN (상세 모달 내 7일 시세 차트용) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- 전역 스타일 및 테마 파일 로드 -->
+  <link rel="stylesheet" href="src/css/variables.css">
+  <link rel="stylesheet" href="src/css/style.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- 대시보드 헤더 영역 -->
+    <header class="dashboard-header">
+      <div class="dashboard-title">
+        <h1>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-coins"><circle cx="8" cy="8" r="6"/><circle cx="18" cy="18" r="4"/><path d="M12 18a6 6 0 0 0-6-6M18 14V4b2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2Z"/></svg>
+          Crypto Pulse
+        </h1>
+      </div>
+      <div class="dashboard-controls">
+        <!-- 실시간 검색바 -->
+        <div class="search-wrapper">
+          <input type="text" class="search-input" id="search-input" placeholder="코인 이름 또는 심볼 검색...">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        
+        <!-- 관심 코인 토글 -->
+        <label class="watchlist-toggle-container">
+          <span class="switch">
+            <input type="checkbox" id="watchlist-toggle">
+            <span class="slider"></span>
+          </span>
+          즐겨찾기만 보기
+        </label>
+        
+        <!-- 수동 새로고침 및 타이머 -->
+        <div class="refresh-wrapper">
+          <span class="timer-text" id="refresh-timer">동기화 대기 중</span>
+          <button class="refresh-btn" id="refresh-btn" title="즉시 새로고침">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-cw"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.72 2.78L19 8"/><polyline points="15 3 21 3 21 9"/></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 1. 시장 현황 요약 컴포넌트 마운트 영역 -->
+    <div id="market-summary-mount"></div>
+
+    <!-- 2. 시세 테이블 컴포넌트 마운트 영역 -->
+    <div id="crypto-table-mount"></div>
+
+    <!-- 3. 상세정보 모달 컴포넌트 마운트 영역 -->
+    <div id="detail-modal-mount"></div>
+  </div>
+
+  <!-- 메인 애플리케이션 브레인 로드 (ES Module) -->
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Pulse - 컴포넌트 디자인 데모</title>
+  <!-- Chart.js CDN (상세 차트용) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- CSS Link -->
+  <link rel="stylesheet" href="src/css/variables.css">
+  <link rel="stylesheet" href="src/css/style.css">
+  <style>
+    /* Demo Page specific overrides */
+    .demo-header {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-light);
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 2rem;
+    }
+    .demo-badge {
+      background-color: var(--border-focus);
+      color: white;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+    }
+    .demo-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .demo-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- 데모 설명 배너 -->
+    <div class="demo-header">
+      <span class="demo-badge">DESIGN SYSTEM DEMO</span>
+      <h2 class="demo-title">컴포넌트 개별 디자인 데모 페이지</h2>
+      <p class="demo-desc">
+        이 페이지는 <strong>MarketSummary</strong>, <strong>CryptoTable</strong>, <strong>DetailModal</strong> 컴포넌트의 디자인 요소를 로컬 더미 데이터로 테스트하기 위해 임시 구성된 데모입니다.<br>
+        리스트의 코인 행을 클릭하면 상세 정보 및 차트 <strong>DetailModal</strong>이 활성화됩니다.
+      </p>
+    </div>
+
+    <!-- 대시보드 헤더 컨트롤 (데모용 정적 탑바) -->
+    <header class="dashboard-header">
+      <div class="dashboard-title">
+        <h1>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-coins"><circle cx="8" cy="8" r="6"/><circle cx="18" cy="18" r="4"/><path d="M12 18a6 6 0 0 0-6-6M18 14V4b2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2Z"/></svg>
+          Crypto Pulse 데모
+        </h1>
+      </div>
+      <div class="dashboard-controls">
+        <div class="search-wrapper">
+          <input type="text" class="search-input" id="demo-search" placeholder="코인명 또는 심볼 검색...">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon lucide lucide-search"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </div>
+        <label class="watchlist-toggle-container">
+          <span class="switch">
+            <input type="checkbox" id="demo-watchlist-toggle">
+            <span class="slider"></span>
+          </span>
+          즐겨찾기만 보기
+        </label>
+      </div>
+    </header>
+
+    <!-- 1. MarketSummary 컴포넌트 마운트 영역 -->
+    <div id="market-summary-mount"></div>
+
+    <!-- 2. CryptoTable 컴포넌트 마운트 영역 -->
+    <div id="crypto-table-mount"></div>
+
+    <!-- 3. DetailModal 컴포넌트 마운트 영역 -->
+    <div id="detail-modal-mount"></div>
+  </div>
+
+  <!-- 데모 스크립트 로드 (ES Module) -->
+  <script type="module" src="demo.js"></script>
+</body>
+</html>
