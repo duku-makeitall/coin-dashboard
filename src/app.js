@@ -1,15 +1,19 @@
-import { fetchTop50Coins } from './api.js';
+import { fetchTop50Coins, fetchCoinChartData } from './api.js';
 import { MarketSummary } from './components/MarketSummary.js';
 import { CryptoTable } from './components/CryptoTable.js';
 import { DetailModal } from './components/DetailModal.js';
 
 class App {
   constructor() {
-    // 2단계 전역 상태
+    // 4단계 전역 상태
     this.state = {
       coins: [],
       loading: false,
-      error: null
+      error: null,
+      watchlist: new Set(JSON.parse(localStorage.getItem('crypto_watchlist') || '[]')),
+      watchlistOnly: false,
+      searchKeyword: '',
+      sortConfig: { key: 'market_cap', direction: 'desc' }
     };
 
     // 1분(60초) 자동 폴링 타이머 상태
@@ -24,7 +28,7 @@ class App {
     // 컴포넌트 마운트 초기화
     this.initComponents();
 
-    // 수동 새로고침 버튼 이벤트 바인딩
+    // 수동 새로고침 및 검색/즐겨찾기 컨트롤 이벤트 바인딩
     this.bindEvents();
 
     // 2단계: 데이터 로드 및 폴링 타이머 시작
@@ -38,7 +42,30 @@ class App {
     const modalMount = document.getElementById('detail-modal-mount');
 
     this.marketSummary = new MarketSummary(summaryMount);
-    this.cryptoTable = new CryptoTable(tableMount);
+    
+    // CryptoTable에 콜백 바인딩
+    this.cryptoTable = new CryptoTable(tableMount, {
+      onCoinClick: (id) => {
+        const coin = this.state.coins.find(c => c.id === id);
+        if (coin) {
+          this.detailModal.open(coin, fetchCoinChartData);
+        }
+      },
+      onToggleFavorite: (id) => {
+        if (this.state.watchlist.has(id)) {
+          this.state.watchlist.delete(id);
+        } else {
+          this.state.watchlist.add(id);
+        }
+        localStorage.setItem('crypto_watchlist', JSON.stringify([...this.state.watchlist]));
+        this.render();
+      },
+      onSort: (sortConfig) => {
+        this.state.sortConfig = sortConfig;
+        this.render();
+      }
+    });
+
     this.detailModal = new DetailModal(modalMount);
   }
 
@@ -73,9 +100,17 @@ class App {
       return;
     }
 
-    // 2단계: 패치된 50개 코인 목록 실시간 데이터 전송
-    this.marketSummary.update(this.state.coins); // (3단계 분석 로직 대기 상태)
-    this.cryptoTable.update(this.state.coins);  // (정적 목록 및 기본 SVG 스파크라인 출력)
+    // 시장 요약 업데이트 (전체 코인 기준)
+    this.marketSummary.update(this.state.coins);
+    
+    // 시세 테이블 업데이트 (필터링 및 정렬 파라미터 전달)
+    this.cryptoTable.update({
+      coins: this.state.coins,
+      watchlist: [...this.state.watchlist],
+      watchlistOnly: this.state.watchlistOnly,
+      searchKeyword: this.state.searchKeyword,
+      sortConfig: this.state.sortConfig
+    });
   }
 
   /**
@@ -147,6 +182,24 @@ class App {
     this.refreshBtn.addEventListener('click', () => {
       this.loadData();
     });
+
+    // 검색창 이벤트 바인딩
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        this.state.searchKeyword = e.target.value;
+        this.render();
+      });
+    }
+
+    // 즐겨찾기 토글 이벤트 바인딩
+    const watchlistToggle = document.getElementById('watchlist-toggle');
+    if (watchlistToggle) {
+      watchlistToggle.addEventListener('change', (e) => {
+        this.state.watchlistOnly = e.target.checked;
+        this.render();
+      });
+    }
   }
 }
 

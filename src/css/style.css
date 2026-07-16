@@ -654,6 +654,25 @@ input:checked + .slider:before {
   .modal-stats-grid {
     grid-template-columns: 1fr;
   }
+
+  /* 모바일 환경 바텀 시트 최적화 */
+  .modal-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modal-content {
+    border-radius: 20px 20px 0 0;
+    transform: translateY(100%);
+    max-width: 100%;
+    margin: 0;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
+  }
+
+  .modal-overlay.open .modal-content {
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 480px) {
